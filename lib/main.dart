@@ -18,6 +18,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.black,
@@ -77,11 +78,15 @@ class HomeScreen extends StatelessWidget {
                   final trips = snapshot.data!.docs;
                   double totalDistance = 0;
                   double totalExpenses = 0;
+                  double totalFuelConsumed = 0;
 
                   for (var trip in trips) {
                     totalDistance += (trip['totalKm'] ?? 0).toDouble();
                     totalExpenses += (trip['totalProfit'] ?? 0).toDouble();
+                    totalFuelConsumed += (trip['diesel'] ?? 0).toDouble();
                   }
+
+                  final averageMileage = totalFuelConsumed > 0 ? totalDistance / totalFuelConsumed : 0.0;
 
                   return Card(
                     color: Colors.grey[850],
@@ -133,6 +138,17 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.speed, color: Colors.grey, size: 16),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Avg Mileage: ${averageMileage.toStringAsFixed(2)} km/L',
+                                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -141,7 +157,8 @@ class HomeScreen extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: SizedBox(
-                                height: 48, // Increased button height
+                                height: 48, // Ensure a fixed height
+                                width: double.infinity, // Ensure it takes full width
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -157,11 +174,12 @@ class HomeScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: Center(
-                                    child: const Text(
-                                      'View Details',
-                                      style: TextStyle(color: Colors.white, fontSize: 14 , fontWeight: FontWeight.bold , ),
-                                      
+                                  child: const Text(
+                                    'View Details',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -199,7 +217,7 @@ class HomeScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                final truckNumber = controller.text.trim();
+                final truckNumber = controller.text.trim().toUpperCase(); // Convert to uppercase
                 if (truckNumber.isNotEmpty) {
                   FirebaseFirestore.instance
                       .collection('trucks')

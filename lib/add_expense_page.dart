@@ -282,6 +282,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
       style: const TextStyle(color: Colors.white),
       onChanged: onChanged,
       onSaved: onSaved,
+      // Removed the dynamic `enabled` property to always allow input
     );
   }
 

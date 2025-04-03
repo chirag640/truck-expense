@@ -211,6 +211,10 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
                         'Diesel: ${expense['diesel']}L (₹${expense['dieselAmount']})',
                         style: const TextStyle(color: Colors.grey, fontSize: 14),
                       ),
+                      Text(
+                        'Mileage: ${(expense['totalKm'] > 0 && expense['diesel'] > 0) ? (expense['totalKm'] / expense['diesel']).toStringAsFixed(2) : 'N/A'} km/L',
+                        style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
                     ],
                   ),
                 ),
