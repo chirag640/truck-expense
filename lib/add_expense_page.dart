@@ -25,7 +25,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add New Expense'),
+        title: const Text('Add New Expense', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         elevation: 0,
       ),
@@ -39,175 +39,151 @@ class _AddExpensePageState extends State<AddExpensePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSectionTitle('Trip Details'),
-                Card(
-                  color: Colors.grey[900],
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildDateField(
-                                label: 'Start Date',
-                                controller: _startDateController,
-                                isStartDate: true,
-                              ),
+                _buildCard(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildDateField(
+                              label: 'Start Date',
+                              controller: _startDateController,
+                              isStartDate: true,
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildDateField(
-                                label: 'End Date',
-                                controller: _endDateController,
-                                isStartDate: false,
-                              ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildDateField(
+                              label: 'End Date',
+                              controller: _endDateController,
+                              isStartDate: false,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'From Location',
-                                onSaved: (value) => _formData['from'] = value!,
-                              ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'From Location',
+                              onSaved: (value) => _formData['from'] = value!,
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'To Location',
-                                onSaved: (value) => _formData['to'] = value!,
-                              ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'To Location',
+                              onSaved: (value) => _formData['to'] = value!,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 _buildSectionTitle('Distance Details'),
-                Card(
-                  color: Colors.grey[900],
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _buildTextField(
-                            label: 'Start KM',
-                            controller: _startKmController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (_) => _calculateTotalKm(),
-                            onSaved: (value) => _formData['startKm'] = int.parse(value!),
-                          ),
+                _buildCard(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          label: 'Start KM',
+                          controller: _startKmController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => _calculateTotalKm(),
+                          onSaved: (value) => _formData['startKm'] = int.parse(value!),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildTextField(
-                            label: 'End KM',
-                            controller: _endKmController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (_) => _calculateTotalKm(),
-                            onSaved: (value) => _formData['endKm'] = int.parse(value!),
-                          ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildTextField(
+                          label: 'End KM',
+                          controller: _endKmController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => _calculateTotalKm(),
+                          onSaved: (value) => _formData['endKm'] = int.parse(value!),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 _buildSectionTitle('Expense Details'),
-                Card(
-                  color: Colors.grey[900],
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Diesel Quantity (L)',
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) => _formData['diesel'] = int.parse(value!),
-                              ),
+                _buildCard(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Diesel Quantity (L)',
+                              keyboardType: TextInputType.number,
+                              onSaved: (value) => _formData['diesel'] = int.parse(value!),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Diesel Cost (₹)',
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) => _formData['dieselAmount'] = double.parse(value!),
-                              ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Diesel Cost (₹)',
+                              keyboardType: TextInputType.number,
+                              onSaved: (value) => _formData['dieselAmount'] = double.parse(value!),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Toll Charges (₹)',
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) => _formData['toll'] = double.parse(value!),
-                              ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Toll Charges (₹)',
+                              keyboardType: TextInputType.number,
+                              onSaved: (value) => _formData['toll'] = double.parse(value!),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Driver Salary (₹)',
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) => _formData['driverSalary'] = double.parse(value!),
-                              ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Driver Salary (₹)',
+                              keyboardType: TextInputType.number,
+                              onSaved: (value) => _formData['driverSalary'] = double.parse(value!),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Maintenance Cost (₹)',
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) => _formData['maintenance'] = double.parse(value!),
-                              ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Maintenance Cost (₹)',
+                              keyboardType: TextInputType.number,
+                              onSaved: (value) => _formData['maintenance'] = double.parse(value!),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildTextField(
-                                label: 'Freight Cost (₹)',
-                                controller: _freightController,
-                                keyboardType: TextInputType.number,
-                                onChanged: (_) => _calculateTotalFreight(),
-                                onSaved: (value) => _formData['freight'] = double.parse(value!),
-                              ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildTextField(
+                              label: 'Freight Cost (₹)',
+                              controller: _freightController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (_) => _calculateTotalFreight(),
+                              onSaved: (value) => _formData['freight'] = double.parse(value!),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        _buildTextField(
-                          label: 'Freight Weight (kg)',
-                          controller: _weightController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => _calculateTotalFreight(),
-                          onSaved: (value) => _formData['weight'] = double.parse(value!),
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      _buildTextField(
+                        label: 'Freight Weight (kg)',
+                        controller: _weightController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (_) => _calculateTotalFreight(),
+                        onSaved: (value) => _formData['weight'] = double.parse(value!),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -221,7 +197,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[800],
+                      backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -237,6 +213,20 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCard({required Widget child}) {
+    return Card(
+      color: Colors.grey[900],
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: child,
       ),
     );
   }
@@ -352,8 +342,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
         .set({
       'id': id,
       'truckId': widget.truckId,
-      'startDate': _startDateController.text, // Save startDate
-      'endDate': _endDateController.text,     // Save endDate
+      'startDate': _startDateController.text,
+      'endDate': _endDateController.text,
       ..._formData,
       'totalProfit': totalProfit,
     });
@@ -367,14 +357,5 @@ class _AddExpensePageState extends State<AddExpensePage> {
     final maintenance = _formData['maintenance'] ?? 0.0;
 
     return totalFreight - (dieselAmount + toll + driverSalary + maintenance);
-  }
-
-  double _calculateTotalExpenses() {
-    final dieselAmount = _formData['dieselAmount'] ?? 0.0;
-    final toll = _formData['toll'] ?? 0.0;
-    final driverSalary = _formData['driverSalary'] ?? 0.0;
-    final maintenance = _formData['maintenance'] ?? 0.0;
-
-    return dieselAmount + toll + driverSalary + maintenance;
   }
 }

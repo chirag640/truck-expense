@@ -249,8 +249,13 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
                 Text(
-                  'Profit: ₹${expense['totalProfit']}',
-                  style: const TextStyle(color: Colors.green, fontSize: 14),
+                  expense['totalProfit'] < 0
+                      ? 'Loss: ₹${expense['totalProfit'].abs()}'
+                      : 'Profit: ₹${expense['totalProfit']}',
+                  style: TextStyle(
+                    color: expense['totalProfit'] < 0 ? Colors.red : Colors.green,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
