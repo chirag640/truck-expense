@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "126550109787",
+    "project_id": "truckexpense-a5669",
+    "storage_bucket": "truckexpense-a5669.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126550109787:android:c576b29fc2f11d9823597e",
+        "android_client_info": {
+          "package_name": "com.example.truck_expense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAObNa7VYzgHsz7ZlJKkSRwBX9CbcI8PDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126550109787:android:143ddb4f63dd7c5a23597e",
+        "android_client_info": {
+          "package_name": "com.example.truck_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAObNa7VYzgHsz7ZlJKkSRwBX9CbcI8PDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
