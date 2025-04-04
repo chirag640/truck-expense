@@ -43,157 +43,50 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  final List<DocumentSnapshot> _trucks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance.collection('trucks').snapshots().listen((snapshot) {
+      for (var change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          setState(() {
+            _trucks.insert(change.newIndex, change.doc);
+            _listKey.currentState?.insertItem(change.newIndex);
+          });
+        } else if (change.type == DocumentChangeType.removed) {
+          setState(() {
+            final removedTruck = _trucks.removeAt(change.oldIndex);
+            _listKey.currentState?.removeItem(
+              change.oldIndex,
+              (context, animation) => _buildTruckCard(removedTruck, animation),
+            );
+          });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Truck List')),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('trucks').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final trucks = snapshot.data!.docs;
-          return ListView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: trucks.length,
-            itemBuilder: (context, index) {
-              final truck = trucks[index];
-              final truckId = truck.id;
-
-              return FutureBuilder<QuerySnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('trucks')
-                    .doc(truckId)
-                    .collection('expenses')
-                    .get(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  final trips = snapshot.data!.docs;
-                  double totalDistance = 0;
-                  double totalExpenses = 0;
-                  double totalFuelConsumed = 0;
-
-                  for (var trip in trips) {
-                    totalDistance += (trip['totalKm'] ?? 0).toDouble();
-                    totalExpenses += (trip['totalProfit'] ?? 0).toDouble();
-                    totalFuelConsumed += (trip['diesel'] ?? 0).toDouble();
-                  }
-
-                  final averageMileage = totalFuelConsumed > 0 ? totalDistance / totalFuelConsumed : 0.0;
-
-                  return Card(
-                    color: Colors.grey[850],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2, // 2/3 of the card width
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  truck['number'],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.map, color: Colors.grey, size: 16),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Distance: ${totalDistance.toStringAsFixed(2)} km',
-                                      style: const TextStyle(color: Colors.grey, fontSize: 14),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.attach_money, color: Colors.grey, size: 16),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Expenses: ₹${totalExpenses.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.speed, color: Colors.grey, size: 16),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Avg Mileage: ${averageMileage.toStringAsFixed(2)} km/L',
-                                      style: const TextStyle(color: Colors.grey, fontSize: 14),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1, // 1/3 of the card width
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: SizedBox(
-                                height: 48, // Ensure a fixed height
-                                width: double.infinity, // Ensure it takes full width
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => TruckExpensePage(truckId: truckId),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'View Details',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          );
+      body: AnimatedList(
+        key: _listKey,
+        padding: const EdgeInsets.all(16.0),
+        initialItemCount: _trucks.length,
+        itemBuilder: (context, index, animation) {
+          return _buildTruckCard(_trucks[index], animation);
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -201,17 +94,152 @@ class HomeScreen extends StatelessWidget {
         label: Row(
           children: const [
             Icon(Icons.add),
-            SizedBox(width: 4), // Add spacing between icon and text
+            SizedBox(width: 4),
             Text(
               'Add Truck',
               style: TextStyle(
                 fontSize: 12,
-                color: Color.fromRGBO(230, 224, 233, 1.0), // Custom color
-                decoration: TextDecoration.none, // No text decoration
+                color: Color.fromRGBO(230, 224, 233, 1.0),
+                decoration: TextDecoration.none,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTruckCard(DocumentSnapshot truck, Animation<double> animation) {
+    final truckId = truck.id;
+    return SizeTransition(
+      sizeFactor: animation,
+      child: FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('trucks')
+            .doc(truckId)
+            .collection('expenses')
+            .get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final trips = snapshot.data!.docs;
+          double totalDistance = 0;
+          double totalExpenses = 0;
+          double totalFuelConsumed = 0;
+
+          for (var trip in trips) {
+            totalDistance += (trip['totalKm'] ?? 0).toDouble();
+            totalExpenses += (trip['totalProfit'] ?? 0).toDouble();
+            totalFuelConsumed += (trip['diesel'] ?? 0).toDouble();
+          }
+
+          final averageMileage = totalFuelConsumed > 0 ? totalDistance / totalFuelConsumed : 0.0;
+
+          return Card(
+            color: Colors.grey[850],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 4,
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          truck['number'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.map, color: Colors.grey, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Distance: ${totalDistance.toStringAsFixed(2)} km',
+                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.attach_money, color: Colors.grey, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Expenses: ₹${totalExpenses.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.speed, color: Colors.grey, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Avg Mileage: ${averageMileage.toStringAsFixed(2)} km/L',
+                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        height: 48,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TruckExpensePage(truckId: truckId),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'View Details',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
