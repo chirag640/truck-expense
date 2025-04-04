@@ -122,12 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final truckId = truck.id;
     return SizeTransition(
       sizeFactor: animation,
-      child: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
             .collection('trucks')
             .doc(truckId)
             .collection('expenses')
-            .get(),
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());

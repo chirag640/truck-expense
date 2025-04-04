@@ -1,0 +1,2 @@
+C:/Users/chaud/Desktop/content/flutter/truck_expense/truck_v2/android/app/.cxx/RelWithDebInfo/1a2w561v/x86/CMakeFiles/edit_cache.dir
+C:/Users/chaud/Desktop/content/flutter/truck_expense/truck_v2/android/app/.cxx/RelWithDebInfo/1a2w561v/x86/CMakeFiles/rebuild_cache.dir
