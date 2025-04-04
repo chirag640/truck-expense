@@ -81,7 +81,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Truck List')),
+      appBar: AppBar(
+        title: const Text('Truck List'),
+        elevation: 10, // Add shadow effect
+        shape: const RoundedRectangleBorder( // Add custom shape
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16),
+          ),
+        ),
+      ),
       body: AnimatedList(
         key: _listKey,
         padding: const EdgeInsets.all(16.0),

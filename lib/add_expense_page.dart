@@ -27,7 +27,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
       appBar: AppBar(
         title: const Text('Add New Expense', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
-        elevation: 0,
+        elevation: 10, // Add shadow effect
+        shape: const RoundedRectangleBorder( // Add custom shape
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(

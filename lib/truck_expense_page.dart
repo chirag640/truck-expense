@@ -20,9 +20,14 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Truck Expenses' , style: TextStyle(color: Colors.white)),
+        title: const Text('Truck Expenses', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
-        elevation: 0,
+        elevation: 10, // Add shadow effect
+        shape: const RoundedRectangleBorder( // Add custom shape
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16),
+          ),
+        ),
       ),
       body: Container(
         color: Colors.black,
