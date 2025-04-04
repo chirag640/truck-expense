@@ -218,7 +218,17 @@ class HomeScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 final truckNumber = controller.text.trim().toUpperCase(); // Convert to uppercase
-                if (truckNumber.isNotEmpty) {
+                final isValidTruckNumber = RegExp(r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$').hasMatch(truckNumber);
+
+                if (truckNumber.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Truck number cannot be empty')),
+                  );
+                } else if (!isValidTruckNumber) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Invalid truck number format')),
+                  );
+                } else {
                   FirebaseFirestore.instance
                       .collection('trucks')
                       .doc(truckNumber)
