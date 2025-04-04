@@ -33,7 +33,7 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
@@ -42,8 +42,21 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
             ),
           );
         },
+        label: Row(
+          children: const [
+            Icon(Icons.add),
+            SizedBox(width: 4), // Add spacing between icon and text
+            Text(
+              'Add Expense',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color.fromRGBO(230, 224, 233, 1.0), // Custom color
+                decoration: TextDecoration.none, // No text decoration
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.blue,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

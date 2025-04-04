@@ -196,9 +196,22 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddTruckDialog(context),
-        child: const Icon(Icons.add),
+        label: Row(
+          children: const [
+            Icon(Icons.add),
+            SizedBox(width: 4), // Add spacing between icon and text
+            Text(
+              'Add Truck',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color.fromRGBO(230, 224, 233, 1.0), // Custom color
+                decoration: TextDecoration.none, // No text decoration
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -217,7 +230,7 @@ class HomeScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                final truckNumber = controller.text.trim().toUpperCase(); // Convert to uppercase
+                final truckNumber = controller.text.trim().toUpperCase();
                 final isValidTruckNumber = RegExp(r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$').hasMatch(truckNumber);
 
                 if (truckNumber.isEmpty) {
