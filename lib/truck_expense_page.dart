@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_expense_page.dart';
+import 'dart:ui';
 
 class TruckExpensePage extends StatefulWidget {
   final String truckId;
@@ -177,106 +178,117 @@ class _TruckExpensePageState extends State<TruckExpensePage> {
   }
 
   Widget _buildTripCard(QueryDocumentSnapshot expense) {
-    return Card(
-      color: Colors.grey[900],
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.4)),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Trip #${expense['from']} - ${expense['to']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
                 Text(
-                  'Trip #${expense['from']} - ${expense['to']}',
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${expense['startDate']} - ${expense['endDate']}',
-              style: const TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'From: ${expense['from']}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'To: ${expense['to']}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Distance: ${expense['totalKm']} km',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Diesel: ${expense['diesel']}L (₹${expense['dieselAmount']})',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Mileage: ${(expense['totalKm'] > 0 && expense['diesel'] > 0) ? (expense['totalKm'] / expense['diesel']).toStringAsFixed(2) : 'N/A'} km/L',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Toll Charges: ₹${expense['toll']}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Driver Salary: ₹${expense['driverSalary']}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Maintenance: ₹${expense['maintenance']}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                      Text(
-                        'Freight: ${expense['weight']} kg',
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total Expenses: ₹${expense['totalProfit']}',
+                  '${expense['startDate']} - ${expense['endDate']}',
                   style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
-                Text(
-                  expense['totalProfit'] < 0
-                      ? 'Loss: ₹${expense['totalProfit'].abs()}'
-                      : 'Profit: ₹${expense['totalProfit']}',
-                  style: TextStyle(
-                    color: expense['totalProfit'] < 0 ? Colors.red : Colors.green,
-                    fontSize: 14,
-                  ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'From: ${expense['from']}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'To: ${expense['to']}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Distance: ${expense['totalKm']} km',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Diesel: ${expense['diesel']}L (₹${expense['dieselAmount']})',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Mileage: ${(expense['totalKm'] > 0 && expense['diesel'] > 0) ? (expense['totalKm'] / expense['diesel']).toStringAsFixed(2) : 'N/A'} km/L',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Toll Charges: ₹${expense['toll']}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Driver Salary: ₹${expense['driverSalary']}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Maintenance: ₹${expense['maintenance']}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            'Freight: ${expense['weight']} kg',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Expenses: ₹${expense['totalProfit']}',
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    Text(
+                      expense['totalProfit'] < 0
+                          ? 'Loss: ₹${expense['totalProfit'].abs()}'
+                          : 'Profit: ₹${expense['totalProfit']}',
+                      style: TextStyle(
+                        color: expense['totalProfit'] < 0 ? Colors.red : Colors.green,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:truck_v2/firebase_options.dart';
 import 'truck_expense_page.dart';
+import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -137,105 +138,112 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final averageMileage = totalFuelConsumed > 0 ? totalDistance / totalFuelConsumed : 0.0;
 
-          return Card(
-            color: Colors.grey[850],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 4,
+          return Container(
             margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          truck['number'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              
+              border: Border.all(color: Colors.grey.withOpacity(0.4)),
+              
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.map, color: Colors.grey, size: 16),
-                            const SizedBox(width: 8),
                             Text(
-                              'Distance: ${totalDistance.toStringAsFixed(2)} km',
-                              style: const TextStyle(color: Colors.grey, fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Icon(Icons.attach_money, color: Colors.grey, size: 16),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Expenses: ₹${totalExpenses.toStringAsFixed(2)}',
+                              truck['number'],
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Icon(Icons.speed, color: Colors.grey, size: 16),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Avg Mileage: ${averageMileage.toStringAsFixed(2)} km/L',
-                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                const Icon(Icons.map, color: Colors.grey, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Distance: ${totalDistance.toStringAsFixed(2)} km',
+                                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.attach_money, color: Colors.grey, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Expenses: ₹${totalExpenses.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.speed, color: Colors.grey, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Avg Mileage: ${averageMileage.toStringAsFixed(2)} km/L',
+                                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        height: 48,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TruckExpensePage(truckId: truckId),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SizedBox(
+                            height: 48,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TruckExpensePage(truckId: truckId),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'View Details',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              child: const Text(
+                                'View Details',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
