@@ -1,32 +1,39 @@
 # Truck Expense Management Application
 
-A Flutter-based application to manage truck expenses efficiently. This app allows users to track trips, calculate expenses, and monitor profits or losses for each truck.
+A comprehensive Flutter-based application designed to manage truck expenses efficiently. This app enables users to track trips, calculate expenses, monitor profits or losses, and generate detailed reports for better financial management.
+
+---
 
 ## Features
 
-- **Truck Management**: Add and view a list of trucks.
-- **Expense Tracking**: Add detailed expenses for each trip, including diesel, toll charges, driver salary, maintenance, and freight.
-- **Profit/Loss Calculation**: Automatically calculate profit or loss for each trip.
-- **Search Functionality**: Search trips by "from" or "to" locations.
-- **Monthly Report**: View a summary of total profit or loss for all trips in a month.
-- **Responsive Design**: The app is designed to look great on all screen sizes.
+### Core Features
+- **Truck Management**: Add, edit, and view a list of trucks with details like registration number, model, and capacity.
+- **Expense Tracking**: Record detailed expenses for each trip, including:
+  - Diesel costs
+  - Toll charges
+  - Driver salary
+  - Maintenance
+  - Freight charges
+- **Profit/Loss Calculation**: Automatically calculate profit or loss for each trip based on income and expenses.
+- **Search Functionality**: Search trips by "from" or "to" locations for quick access.
+- **Monthly Report**: View a summary of total profit or loss for all trips in a selected month.
 
-## Screenshots
+### Additional Features
+- **User Authentication**: Multi-user support with login and signup functionality. Each user can manage their own trucks and expenses securely.
+- **Responsive Design**: Optimized for all screen sizes, including mobile, tablet, and desktop.
+- **Firebase Integration**: Securely store and retrieve data using Firebase services.
 
-### Home Screen
-Displays a list of trucks with total distance traveled and expenses.
-
-### Truck Expense Page
-Shows detailed trip expenses for a selected truck.
-
-### Add Expense Page
-Allows users to add a new trip expense with all necessary details.
 
 ## Installation
 
+### Prerequisites
+- Flutter SDK installed on your system.
+- A Firebase project set up with Firestore enabled.
+
+### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/chirag640/truck-expense-management.git
+   git clone https://github.com/chirag640/truck-expense.git
    ```
 2. Navigate to the project directory:
    ```bash
@@ -36,36 +43,67 @@ Allows users to add a new trip expense with all necessary details.
    ```bash
    flutter pub get
    ```
-4. Run the app:
+4. Configure Firebase:
+   - Set up a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+   - Add Android and iOS apps to the Firebase project.
+   - Replace the `firebase_options.dart` file with your Firebase configuration.
+5. Run the app:
    ```bash
    flutter run
    ```
 
-## Firebase Configuration
-
-This app uses Firebase for backend services. Ensure you have configured Firebase for your project:
-
-1. Set up a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
-2. Add your Android and iOS apps to the Firebase project.
-3. Replace the `firebase_options.dart` file with your Firebase configuration.
+---
 
 ## Dependencies
 
-- **Flutter**: The app is built using Flutter.
-- **Firebase**: Used for backend services like Firestore.
-- **Cloud Firestore**: For storing truck and expense data.
+- **Flutter**: Framework for building the app.
+- **Firebase**: Backend services for authentication, Firestore, and storage.
+- **Cloud Firestore**: Database for storing truck and expense data.
+- **Shared Preferences**: For storing user session data locally.
+- **Intl**: For date and number formatting.
+
+---
 
 ## How to Use
 
-1. **Add a Truck**: Click the "+" button on the home screen to add a new truck.
-2. **View Truck Details**: Click on a truck to view its trip expenses.
-3. **Add Expense**: Click the "+" button on the truck expense page to add a new trip expense.
-4. **Search Trips**: Use the search bar to find trips by "from" or "to" locations.
-5. **View Monthly Report**: Check the monthly report section for a summary of profits or losses.
+1. **Sign Up/Login**: Create an account or log in using the authentication system.
+2. **Add a Truck**: Click the "+" button on the home screen to add a new truck. Provide details like registration number, model, and capacity.
+3. **View Truck Details**: Tap on a truck to view its trip expenses and overall profit/loss.
+4. **Add Expense**: Click the "+" button on the truck expense page to add a new trip expense. Fill in details like trip distance, diesel cost, toll charges, and freight income.
+5. **Search Trips**: Use the search bar on the truck expense page to find trips by "from" or "to" locations.
+6. **View Monthly Report**: Navigate to the "Reports" section to view a graphical summary of profits and losses for a selected month.
+7. **Logout**: Use the logout button in the home screen to securely log out of your account.
+
+---
+
+## Firebase Configuration
+
+This app uses Firebase for backend services. Follow these steps to configure Firebase:
+
+1. Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+2. Add your Android and iOS apps to the Firebase project.
+3. Download the `google-services.json` file for Android and `GoogleService-Info.plist` for iOS.
+4. Place these files in the respective directories:
+   - `android/app/` for `google-services.json`
+   - `ios/Runner/` for `GoogleService-Info.plist`
+5. Replace the `firebase_options.dart` file in the project with your Firebase configuration.
+
+---
+
+## Roadmap
+
+- **Upcoming Features**:
+  - Integration with GPS for automatic trip distance calculation.
+  - Push notifications for reminders and updates.
+  - Advanced analytics for expense trends and predictions.
+
+---
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
 
 ## Author
 
