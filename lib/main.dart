@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:truck_v2/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'truck_expense_page.dart';
 import 'dart:ui';
+import 'login_page.dart';
+import 'signup_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure this is called first
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
-  runApp(const MainApp());
+  );
+
+  final prefs = await SharedPreferences.getInstance();
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  runApp(MainApp(initialRoute: isLoggedIn ? '/home' : '/login'));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final String initialRoute;
+
+  const MainApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,12 @@ class MainApp extends StatelessWidget {
           bodyLarge: TextStyle(color: Colors.grey),
         ),
       ),
-      home: const HomeScreen(),
+      initialRoute: initialRoute,
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+        '/home': (context) => const HomeScreen(),
+      },
     );
   }
 }
@@ -83,6 +97,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Truck List'),
+        automaticallyImplyLeading: false, // Disable back arrow
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('isLoggedIn', false);
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+        ],
         elevation: 10, // Add shadow effect
         shape: const RoundedRectangleBorder( // Add custom shape
           borderRadius: BorderRadius.vertical(
