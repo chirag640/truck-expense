@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   Future<void> _login(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('userEmail', _emailController.text.trim());
     Navigator.pushReplacementNamed(context, '/home');
   }
 
@@ -29,6 +39,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 hintText: 'Email',
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -43,7 +54,8 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextField(
-              obscureText: true,
+              controller: _passwordController,
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 hintText: 'Password',
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -52,6 +64,17 @@ class LoginPage extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
                 ),
               ),
               style: const TextStyle(color: Colors.white),

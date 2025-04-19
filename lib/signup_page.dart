@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
+
+  @override
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,8 @@ class SignupPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextField(
-              obscureText: true,
+              controller: _passwordController,
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 hintText: 'Password',
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -46,12 +57,24 @@ class SignupPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
               ),
               style: const TextStyle(color: Colors.white),
             ),
             const SizedBox(height: 16),
             TextField(
-              obscureText: true,
+              controller: _confirmPasswordController,
+              obscureText: !_isConfirmPasswordVisible,
               decoration: InputDecoration(
                 hintText: 'Confirm Password',
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -60,6 +83,17 @@ class SignupPage extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                    });
+                  },
                 ),
               ),
               style: const TextStyle(color: Colors.white),

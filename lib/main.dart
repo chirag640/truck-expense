@@ -68,11 +68,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   final List<DocumentSnapshot> _trucks = [];
+  late String _currentUserEmail;
 
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance.collection('trucks').snapshots().listen((snapshot) {
+    _loadCurrentUser();
+  }
+
+  Future<void> _loadCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentUserEmail = prefs.getString('userEmail') ?? '';
+    FirebaseFirestore.instance
+        .collection('trucks')
+        .where('addedBy', isEqualTo: _currentUserEmail)
+        .snapshots()
+        .listen((snapshot) {
       for (var change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
           setState(() {
@@ -314,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   FirebaseFirestore.instance
                       .collection('trucks')
                       .doc(truckNumber)
-                      .set({'number': truckNumber});
+                      .set({'number': truckNumber, 'addedBy': _currentUserEmail});
                   Navigator.pop(context);
                 }
               },
