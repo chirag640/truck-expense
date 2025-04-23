@@ -58,23 +58,29 @@ A comprehensive Flutter-based application designed to manage truck expenses effi
 
 Here are some screenshots of the application:
 
-- **Home Screen**  
-  ![Home Screen](assets/ss/home_page.jpg)
+<table>
+  <tr>
+    <td><b>Home Screen</b></td>
+    <td><b>Add Truck</b></td>
+    <td><b>Expense Tracking</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/ss/home_page.jpg" alt="Home Screen" width="200"></td>
+    <td><img src="assets/ss/add_truck.jpg" alt="Add Truck" width="200"></td>
+    <td><img src="assets/ss/track_expense.jpg" alt="Expense Tracking" width="200"></td>
+  </tr>
+  <tr>
+    <td><b>Add Expense</b></td>
+    <td><b>Login</b></td>
+    <td><b>Signup</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/ss/add_expense.jpg" alt="Add Expense" width="200"></td>
+    <td><img src="assets/ss/login_page.jpg" alt="Login" width="200"></td>
+    <td><img src="assets/ss/signup_page.jpg" alt="Signup" width="200"></td>
+  </tr>
+</table>
 
-- **Add Truck**  
-  ![Add Truck](assets/ss/add_truck.jpg)
-
-- **Expense Tracking**  
-  ![Expense Tracking](assets/ss/track_expense.jpg)
-
-- **Add Expense**  
-  ![Add Expense](assets/ss/add_expense.jpg)
-
-- **Login**  
-  ![Login](assets/ss/login_page.jpg)
-
-- **Signup**  
-  ![Signup](assets/ss/signup_page.jpg)
 ---
 
 ## Dependencies
