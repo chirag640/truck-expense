@@ -54,6 +54,29 @@ A comprehensive Flutter-based application designed to manage truck expenses effi
 
 ---
 
+## Screenshots
+
+Here are some screenshots of the application:
+
+- **Home Screen**  
+  ![Home Screen](assets/ss/home_page.jpg)
+
+- **Add Truck**  
+  ![Add Truck](assets/ss/add_truck.jpg)
+
+- **Expense Tracking**  
+  ![Expense Tracking](assets/ss/track_expense.jpg)
+
+- **Add Expense**  
+  ![Add Expense](assets/ss/add_expense.jpg)
+
+- **Login**  
+  ![Login](assets/ss/login_page.jpg)
+
+- **Signup**  
+  ![Signup](assets/ss/signup_page.jpg)
+---
+
 ## Dependencies
 
 - **Flutter**: Framework for building the app.
