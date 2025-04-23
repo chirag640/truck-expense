@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   final List<DocumentSnapshot> _trucks = [];
   late String _currentUserEmail;
+  DateTime? _lastBackPressed;
 
   @override
   void initState() {
@@ -105,50 +106,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Truck List'),
-        automaticallyImplyLeading: false, // Disable back arrow
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.setBool('isLoggedIn', false);
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-          ),
-        ],
-        elevation: 10, // Add shadow effect
-        shape: const RoundedRectangleBorder( // Add custom shape
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(16),
-          ),
-        ),
-      ),
-      body: AnimatedList(
-        key: _listKey,
-        padding: const EdgeInsets.all(16.0),
-        initialItemCount: _trucks.length,
-        itemBuilder: (context, index, animation) {
-          return _buildTruckCard(_trucks[index], animation);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddTruckDialog(context),
-        label: Row(
-          children: const [
-            Icon(Icons.add),
-            SizedBox(width: 4),
-            Text(
-              'Add Truck',
-              style: TextStyle(
-                fontSize: 12,
-                color: Color.fromRGBO(230, 224, 233, 1.0),
-                decoration: TextDecoration.none,
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        final now = DateTime.now();
+        if (_lastBackPressed == null || now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
+          _lastBackPressed = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Press back again to exit')),
+          );
+          return false;
+        }
+        return true; // Exit the app
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Truck List'),
+          automaticallyImplyLeading: false, // Disable back arrow
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('isLoggedIn', false);
+                Navigator.pushReplacementNamed(context, '/login');
+              },
             ),
           ],
+          elevation: 10, // Add shadow effect
+          shape: const RoundedRectangleBorder( // Add custom shape
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(16),
+            ),
+          ),
+        ),
+        body: AnimatedList(
+          key: _listKey,
+          padding: const EdgeInsets.all(16.0),
+          initialItemCount: _trucks.length,
+          itemBuilder: (context, index, animation) {
+            return _buildTruckCard(_trucks[index], animation);
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _showAddTruckDialog(context),
+          label: Row(
+            children: const [
+              Icon(Icons.add),
+              SizedBox(width: 4),
+              Text(
+                'Add Truck',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color.fromRGBO(230, 224, 233, 1.0),
+                  decoration: TextDecoration.none,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

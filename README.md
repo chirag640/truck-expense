@@ -73,6 +73,7 @@ A comprehensive Flutter-based application designed to manage truck expenses effi
 5. **Search Trips**: Use the search bar on the truck expense page to find trips by "from" or "to" locations.
 6. **View Monthly Report**: Navigate to the "Reports" section to view a graphical summary of profits and losses for a selected month.
 7. **Logout**: Use the logout button in the home screen to securely log out of your account.
+8. **Back Navigation**: The app prevents navigation back to the login or register page using the back button unless you explicitly log out.
 
 ---
 
