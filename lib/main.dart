@@ -114,9 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Press back again to exit')),
           );
-          return false;
+          return false; // Prevent exiting on the first back press
         }
-        return true; // Exit the app
+        return true; // Exit the app on the second back press
       },
       child: Scaffold(
         appBar: AppBar(
