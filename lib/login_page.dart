@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,11 +15,27 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = false;
 
   Future<void> _login(BuildContext context) async {
+  try {
+    // Authenticate user with Firebase
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    // Save login state in SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
-    await prefs.setString('userEmail', _emailController.text.trim());
+    await prefs.setString('userEmail', userCredential.user!.email!);
+
+    // Navigate to the home page
     Navigator.pushReplacementNamed(context, '/home');
+  } catch (e) {
+    // Handle login errors (e.g., invalid email or password)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Login failed: ${e.toString()}')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

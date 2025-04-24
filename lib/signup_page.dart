@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -16,15 +18,35 @@ class _SignupPageState extends State<SignupPage> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Perform signup logic here (e.g., send data to backend)
+  void _submitForm() async {
+  if (_formKey.currentState!.validate()) {
+    try {
+      // Create user in Firebase Authentication
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Store additional user details in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'name': _nameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'createdAt': Timestamp.now(),
+      });
+
+      // Show success message and navigate to login page
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Signup successful!')),
       );
       Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      // Handle errors (e.g., email already in use)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
